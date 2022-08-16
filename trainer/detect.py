@@ -75,7 +75,7 @@ def detect():
 
     print("\nSaving images:")
 
-    results = {'class':[], 'confidence':[]}
+    results = {'class':[], 'confidence':[], 'image':[]}
     for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
         print("(%d) Image: '%s'" % (img_i, path))
         # Create plot
@@ -122,6 +122,7 @@ def detect():
         filename = path.split("/")[-1].split(".")[0]
         print(filename)
         plt.savefig(f"trainer/outcome/{filename}.png", bbox_inches="tight", pad_inches=0.0)
+        results['image'].append(f"trainer/outcome/{filename}.png")
         plt.close()
 
     return results

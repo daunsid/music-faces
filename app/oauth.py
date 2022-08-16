@@ -7,7 +7,7 @@ AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 # Make a request to the /authorize endpoint to get an authorization code
-CLIENT_ID = '2c115b5e727e407d9a7143ee54906b4e'
+#CLIENT_ID = '2c115b5e727e407d9a7143ee54906b4e'
 auth_code = requests.get(AUTH_URL, {
     'client_id': settings.client_id,
     'response_type': 'code',
