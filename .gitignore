@@ -1,0 +1,6 @@
+.env/
+__pycache__
+emotion-venv
+datasets/images/
+datasets/labels/
+trainer/weights/epoch_90.pth

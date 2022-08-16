@@ -1,0 +1,4 @@
+classes= 3
+train=datasets/img_paths.txt
+valid=datasets/img_paths.txt
+names=trainer/config/classes.names
