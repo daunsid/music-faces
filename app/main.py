@@ -1,18 +1,16 @@
-from typing import List
-from logging import exception
-from .get_songs import get_song
-import io
+from genericpath import isfile
+import io, os, base64
 from PIL import Image
+from typing import List
+from .get_songs import get_song
+
 
 from fastapi import FastAPI, UploadFile, File, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import ORJSONResponse, StreamingResponse
-from fastapi.responses import FileResponse
-
+from fastapi.responses import ORJSONResponse
 
 
 app = FastAPI()
-
 
 origins = ["*"]
 
@@ -30,19 +28,29 @@ def welcome():
     content="""</br><b>Let's recommend some songs to you but first of all let decide what your mood is</b>"""
     return {'response':'Hi! Welcome to my API'+content}
 
-@app.post("/recommend", response_class=Response)
-async def create_upload_file(files: List[UploadFile] = File(...)):
-    file_location = [f"datasets/test/{fn.filename}" for fn in files]
-    list(map(lambda x,y: open(x, 'wb+').write(y.file.read()), file_location, files))
-    results = get_song()
-    results['confidence(%)'] = str(results['confidence(%)'])
-    results['music_id'] = str(results['music_id'])
+@app.post("/recommend", response_class=ORJSONResponse)
+async def create_upload_file(files: UploadFile= File(...)):
 
-    img = Image.open(results['image'])
-    bytes_image = io.BytesIO()
-    img.save(bytes_image, format='PNG')
-
-    bytes_image.seek(0)
-    return StreamingResponse(bytes_image, headers=results, media_type="image/png")
+    file_path = f"datasets/test/{files.filename}"
+    outcome = {"results":None}
+    
+    with open(file_path, 'wb+') as imfile:
+        imfile.write(files.file.read())
+        imfile.close()
+    try:
+        outcome = get_song()       
+        if os.path.isfile(outcome['image']):
+            print(Image.open(outcome['image']))
+        outcome["image"] = "image displayed"
+        
+    except Exception as e:
+        error = e.args
+        print(error)
+    
+    finally:
+        if os.path.isfile(f"datasets/test/{files.filename}") or os.path.isfile(f"outcome/test/{files.filename}"):
+            os.remove(f"datasets/test/{files.filename}")
+            os.remove(f"trainer/outcome/test/{files.filename.replace('.jpg', '.png')}")
+    return outcome
 
 
