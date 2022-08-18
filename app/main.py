@@ -5,7 +5,7 @@ from typing import List
 from .get_songs import get_song
 
 
-from fastapi import FastAPI, UploadFile, File, Response
+from fastapi import FastAPI, UploadFile, File, Response, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 
@@ -40,12 +40,11 @@ async def create_upload_file(files: UploadFile= File(...)):
     try:
         outcome = get_song()       
         if os.path.isfile(outcome['image']):
-            print(Image.open(outcome['image']))
+            Image.open(outcome['image']).show('detected image')
         outcome["image"] = "image displayed"
         
-    except Exception as e:
-        error = e.args
-        print(error)
+    except Exception as error:
+        raise HTTPException(status_code=status.HTTP_408_REQUEST_TIMEOUT, detail="Can't Connect to the internet")
     
     finally:
         if os.path.isfile(f"datasets/test/{files.filename}") or os.path.isfile(f"outcome/test/{files.filename}"):

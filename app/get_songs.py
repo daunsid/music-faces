@@ -23,8 +23,6 @@ def get_song():
     confidence = max(results['confidence'])
 
     print('recommending your song......')
-    print(cls)
-    print(results['image'])
     playlist_id = emotion[cls[-1]]
     image = results['image'][-1]
 
