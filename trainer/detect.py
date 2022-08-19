@@ -120,7 +120,6 @@ def detect():
         plt.gca().xaxis.set_major_locator(NullLocator())
         plt.gca().yaxis.set_major_locator(NullLocator())
         filename = path.split("/")[-1].split(".")[0]
-        print(filename)
         plt.savefig(f"trainer/outcome/{filename}.png", bbox_inches="tight", pad_inches=0.0)
         results['image'].append(f"trainer/outcome/{filename}.png")
         plt.close()

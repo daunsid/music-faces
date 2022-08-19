@@ -29,7 +29,11 @@ def welcome():
     return {'response':'Hi! Welcome to my API'+content}
 
 @app.post("/recommend", response_class=ORJSONResponse)
-async def create_upload_file(files: UploadFile= File(...)):
+async def make_recommedation(files: UploadFile= File(...)):
+    
+    
+    if files.content_type != 'image/jpeg':
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No image uploaded please upload a jpg image")
 
     file_path = f"datasets/test/{files.filename}"
     outcome = {"results":None}
@@ -37,6 +41,7 @@ async def create_upload_file(files: UploadFile= File(...)):
     with open(file_path, 'wb+') as imfile:
         imfile.write(files.file.read())
         imfile.close()
+
     try:
         outcome = get_song()       
         if os.path.isfile(outcome['image']):
@@ -44,12 +49,11 @@ async def create_upload_file(files: UploadFile= File(...)):
         outcome["image"] = "image displayed"
         
     except Exception as error:
-        raise HTTPException(status_code=status.HTTP_408_REQUEST_TIMEOUT, detail="Can't Connect to the internet")
-    
+        print(error.args)
+
     finally:
-        if os.path.isfile(f"datasets/test/{files.filename}") or os.path.isfile(f"outcome/test/{files.filename}"):
+        if os.path.isfile(f"datasets/test/{files.filename}"):
             os.remove(f"datasets/test/{files.filename}")
+        if os.path.isfile(f"trainer/outcome/test/{files.filename.replace('.jpg', '.png')}"):
             os.remove(f"trainer/outcome/test/{files.filename.replace('.jpg', '.png')}")
     return outcome
-
-
