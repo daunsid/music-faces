@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     neutral_playlist_id:str
     client_secret:str
     client_id:str
+    base_url:str
 
     class Config:
         env_file = '.env'

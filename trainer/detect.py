@@ -77,7 +77,7 @@ def detect():
 
     results = {'class':[], 'confidence':[], 'image':[]}
     for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
-        print("(%d) Image: '%s'" % (img_i, path))
+        #print("(%d) Image: '%s'" % (img_i, path))
         # Create plot
         img = np.array(Image.open(path))
         plt.figure()
@@ -95,7 +95,7 @@ def detect():
                 
                 results['class'].append(classes[int(cls_pred)])
                 results['confidence'].append(cls_conf.item())
-                print("\t+ Label: %s, Conf: %.5f" % (classes[int(cls_pred)], cls_conf.item()))
+                #print("\t+ Label: %s, Conf: %.5f" % (classes[int(cls_pred)], cls_conf.item()))
 
                 box_w = x2 - x1
                 box_h = y2 - y1

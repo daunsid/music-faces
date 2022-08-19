@@ -51,15 +51,5 @@ def get_song():
             'image':image}
 
 
-
+    print("Done!")
     return song
-
-
-"""def play_song():
-
-
-    BODY = {'context_url':'https://api.spotify.com/v1/tracks/7CIa25JJTGo1JvehNLIqFj'}
-    print(requests.put('https://api.spotify.com/v1/me/player/play',data=BODY, headers=headers).reason)
-
-#print(get_song())
-"""
